@@ -1,37 +1,23 @@
-import { Geist, Geist_Mono } from "next/font/google";
+// app/layout.tsx
+import Sidebar from "../components/sidebar";
+import React from "react";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-//ye dono font uniformity ke liye hai
-
 export const metadata = {
-  title: "Walmart Edge Compute",
-  description: "A Progressive Web App built with Next.js",
-  manifest: "/manifest.json",
-  themeColor: "#000000",
-  viewport: "minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover",
-  icons: {
-    icon: "/icons/icon-192x192.png",
-    apple: "/icons/icon-192x192.png",
-  }
+  title: "RetailHub",
+  description: "RetailHub Admin Panel",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className="flex">
+        <Sidebar /> {/* Persistent */}
+        <main className="flex-1 p-6 bg-gray-50 min-h-screen">
+          {children} {/* Dynamic content changes here */}
+        </main>
       </body>
     </html>
   );
