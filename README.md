@@ -1,5 +1,5 @@
 # 🧾 EdgeCart: Offline-First Smart Checkout Kiosk  
-*by Pied Pipers*
+### by Pied Pipers
 
 ## 🌟 Overview
 
@@ -73,5 +73,4 @@ This solution directly supports Walmart Sparkathon’s themes of:
 ### 2. Clone Repo & Install
 ```bash
 git clone https://github.com/boss6825/Pied-Pipers.git
-cd checkoutlite
-npm install
+
