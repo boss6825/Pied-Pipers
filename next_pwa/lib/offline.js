@@ -1,9 +1,11 @@
+//handles offline storage of data, indexdb use kiya hai
+
 import { openDB } from 'idb';
 
-const DB_NAME = 'walmart-edge-db';
-const STORE_NAME = 'offline-data';
+const DB_NAME = 'walmart-edge-db'; //for offline data storage
+const STORE_NAME = 'offline-data'; //cached data store ke liye
 
-export async function initDB() {
+export async function initDB() { //db initiate kia hai
     return openDB(DB_NAME, 1, {
         upgrade(db) {
             db.createObjectStore(STORE_NAME);
@@ -36,7 +38,7 @@ export async function getAllOfflineData() {
     return db.getAll(STORE_NAME);
 }
 
-// Function to check if we're offline
+// Function to check connectivty
 export function isOffline() {
     return typeof navigator !== 'undefined' && !navigator.onLine;
 }
@@ -46,8 +48,8 @@ export async function fetchWithOfflineSupport(url, options = {}) {
     const cacheKey = `${options.method || 'GET'}-${url}`;
 
     try {
-        // Try to fetch from network first
-        const response = await fetch(url, options);
+        
+        const response = await fetch(url, options);// Try to fetch from network first
         const data = await response.json();
 
         // Cache successful GET requests
@@ -57,7 +59,7 @@ export async function fetchWithOfflineSupport(url, options = {}) {
 
         return data;
     } catch (error) {
-        // If offline, try to get from cache
+        // If offline, cache se uthao
         if (isOffline() && (options.method === undefined || options.method === 'GET')) {
             const cachedData = await getFromOfflineStorage(cacheKey);
             if (cachedData) {

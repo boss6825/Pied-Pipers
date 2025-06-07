@@ -11,6 +11,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+//ye dono font uniformity ke liye hai
+
 export const metadata = {
   title: "Walmart Edge Compute",
   description: "A Progressive Web App built with Next.js",
