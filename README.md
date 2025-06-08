@@ -34,8 +34,8 @@ This solution directly supports Walmart Sparkathon’s themes of:
 
 - **Frontend**: Web UI (React/HTML) running locally in Chromium or kiosk mode.
 - **Backend**: Node.js Express server handling logic & APIs.
-- **Local Storage**: SQLite DB + persistent file-backed message queue.
-- **Sync Engine**: Background service in Node.js or Python using event loop.
+- **Local Storage**: SQLite DB + llIndexDB + persistent file-backed message queue.
+- **Sync Engine**: Background service in Node.js  using event loop.
 - **Platform**: Raspberry Pi 4 (4GB RAM) running Raspberry Pi OS.
 
 ![System Architecture](docs/EdgeCart_architecture.png)
@@ -57,7 +57,7 @@ This solution directly supports Walmart Sparkathon’s themes of:
 | Layer              | Tech         |
 |--------------------|--------------|
 | Frontend + Backend | NextJS |
-| Local DB           | SQLite3 |
+| Local DB           | SQLite3 , IndexDB|
 | Queue              | File-backed JSON Queue |
 | Sync Logic         | Node.js Worker / Cron Job |
 | Cloud API          | AWS |
