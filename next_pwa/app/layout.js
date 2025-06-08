@@ -4,8 +4,8 @@ import React from "react";
 import "./globals.css";
 
 export const metadata = {
-  title: "RetailHub",
-  description: "RetailHub Admin Panel",
+  title: "EdgeCart",
+  description: "EdgeCart Admin Panel",
   manifest: "/manifest.json",
 };
 
