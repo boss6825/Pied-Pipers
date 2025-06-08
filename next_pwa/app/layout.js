@@ -6,6 +6,7 @@ import "./globals.css";
 export const metadata = {
   title: "RetailHub",
   description: "RetailHub Admin Panel",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
