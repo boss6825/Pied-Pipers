@@ -21,11 +21,7 @@ const Sidebar = () => {
     { name: "Dashboard", icon: <LayoutDashboard size={18} />, href: "/home" },
     { name: "Products", icon: <Package size={18} />, href: "/products" },
     { name: "Add Product", icon: <Plus size={18} />, href: "/addProducts" },
-    { name: "Product Details", icon: <CheckCircle size={18} />, href: "/productDetails" },
-    { name: "Inventory", icon: <Grid size={18} />, href: "/inventory" },
-    { name: "Search", icon: <Search size={18} />, href: "/search" },
-    { name: "Analytics", icon: <BarChart size={18} />, href: "/analytics" },
-    { name: "Settings", icon: <Settings size={18} />, href: "/settings" },
+    { name: "Checkout", icon: <CheckCircle size={18} />, href: "/checkout" },
   ];
 
   return (
@@ -42,7 +38,7 @@ const Sidebar = () => {
             <Link
             href={item.href}
               key={item.name}
-              className={`flex items-center space-x-3 py-2 px-3 rounded-md text-sm text-gray-700 cursor-pointer ${currentPath === item.href ? 'bg-gray-200 font-semibold' : 'hover:bg-gray-100'}`}
+              className={`flex mb-5 items-center space-x-3 py-2 px-3 rounded-md text-sm text-gray-700 cursor-pointer ${currentPath === item.href ? 'bg-gray-200 font-semibold' : 'hover:bg-gray-100'}`}
             >
               <span className="w-5">{item.icon}</span>
               <span>{item.name}</span>
