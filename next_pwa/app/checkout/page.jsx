@@ -1,0 +1,65 @@
+'use client';
+
+import { Box, Button, Flex, Heading, Separator, Text, TextField } from "@radix-ui/themes";
+
+export default function CheckoutPage() {
+  return (
+    <Box className="p-6 max-w-6xl mx-auto">
+      <Heading size="6" mb="6">Checkout</Heading>
+
+      <Flex direction="row" gap="6" wrap="wrap">
+
+        {/* Billing Details */}
+        <Box className="flex-1 min-w-[300px]">
+          <Heading size="4" mb="3">Billing Details</Heading>
+          <Flex direction="column" gap="3">
+            <TextField.Root placeholder="Full Name" />
+            <TextField.Root placeholder="Email Address" />
+            <TextField.Root placeholder="Phone Number" />
+            <TextField.Root placeholder="Address" />
+            <Flex gap="3">
+              <TextField.Root placeholder="City" />
+              <TextField.Root placeholder="ZIP Code" />
+            </Flex>
+          </Flex>
+        </Box>
+
+        {/* Order Summary */}
+        <Box className="flex-1 min-w-[300px] bg-white rounded-lg p-4 shadow-md">
+          <Heading size="4" mb="3">Order Summary</Heading>
+
+          <Flex direction="column" gap="3">
+            <Flex justify="between">
+              <Text>Product 1</Text>
+              <Text>₹499</Text>
+            </Flex>
+            <Flex justify="between">
+              <Text>Product 2</Text>
+              <Text>₹799</Text>
+            </Flex>
+
+            <Separator my="2" />
+
+            <Flex justify="between">
+              <Text weight="bold">Subtotal</Text>
+              <Text weight="bold">₹1298</Text>
+            </Flex>
+            <Flex justify="between">
+              <Text>Shipping</Text>
+              <Text>₹50</Text>
+            </Flex>
+
+            <Separator my="2" />
+
+            <Flex justify="between">
+              <Text weight="bold">Total</Text>
+              <Text weight="bold">₹1348</Text>
+            </Flex>
+
+            <Button className="mt-4" size="3">Place Order</Button>
+          </Flex>
+        </Box>
+      </Flex>
+    </Box>
+  );
+}
