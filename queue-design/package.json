@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "lowdb": "^7.0.1",
-    "nanoid": "^5.1.5"
-  }
-}
