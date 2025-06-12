@@ -1,8 +1,40 @@
 'use client';
 
+import { useState } from "react";
 import { Box, Button, Flex, Heading, Separator, Text, TextField } from "@radix-ui/themes";
+import { addToSyncQueue } from "../../lib/offline";
+
+// Helper to generate a simple UUID (for demo/testing)
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 
 export default function CheckoutPage() {
+  const [confirmation, setConfirmation] = useState("");
+  const handlePlaceOrder = async () => {
+    // Dummy transaction data for testing
+    const transactionId = generateUUID();
+    const transactionData = {
+      customer: {
+        name: "Test User",
+        email: "test@example.com",
+        phone: "1234567890",
+        address: "123 Main St, City, ZIP"
+      },
+      items: [
+        { name: "Product 1", price: 499, qty: 1 },
+        { name: "Product 2", price: 799, qty: 1 }
+      ],
+      total: 1348,
+      createdAt: new Date().toISOString()
+    };
+    await addToSyncQueue(transactionId, transactionData);
+    setConfirmation(`Transaction queued for sync! ID: ${transactionId}`);
+  };
+
   return (
     <Box className="p-6 max-w-6xl mx-auto">
       <Heading size="6" mb="6">Checkout</Heading>
@@ -56,7 +88,10 @@ export default function CheckoutPage() {
               <Text weight="bold">₹1348</Text>
             </Flex>
 
-            <Button className="mt-4" size="3">Place Order</Button>
+            <Button className="mt-4" size="3" onClick={handlePlaceOrder}>Place Order</Button>
+            {confirmation && (
+              <Text color="green" mt="3">{confirmation}</Text>
+            )}
           </Flex>
         </Box>
       </Flex>
