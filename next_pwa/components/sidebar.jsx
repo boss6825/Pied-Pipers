@@ -21,6 +21,7 @@ const Sidebar = () => {
     { name: "Dashboard", icon: <LayoutDashboard size={18} />, href: "/home" },
     { name: "Products", icon: <Package size={18} />, href: "/products" },
     { name: "Add Product", icon: <Plus size={18} />, href: "/addProducts" },
+    {name: "Buy Products", icon: <Grid size={18} />, href: "/order" },
     { name: "Checkout", icon: <CheckCircle size={18} />, href: "/checkout" },
   ];
 

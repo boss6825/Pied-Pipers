@@ -31,7 +31,18 @@ export default function AddProductPage() {
 
   const onSubmit = (data) => {
     console.log("Submit:", data);
-    // TODO: call API to save
+
+  const existing = JSON.parse(localStorage.getItem("products") || "[]");
+  const formatted = {
+    name: data.name,
+    sku: data.sku,
+    category: data.category,
+    price: data.sellingPrice,
+    stock: data.initialStock,
+  };
+  localStorage.setItem("products", JSON.stringify([...existing, formatted]));
+  alert("Product saved!");
+  
   };
 
   return (

@@ -6,8 +6,10 @@ import { Button } from "@radix-ui/themes";
 import { TextField } from "@radix-ui/themes";
 import { Select } from "@radix-ui/themes";
 import { Badge } from "@radix-ui/themes";
+import Link from "next/link";
+import { useEffect } from "react";
 
-const products = [
+const defaultProducts = [
   {
     name: "Wireless Headphones",
     sku: "WH-001",
@@ -45,6 +47,7 @@ function getStatus(stock) {
 }
 
 export default function ProductsPage() {
+  const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState("");
@@ -56,6 +59,11 @@ export default function ProductsPage() {
     const matchStatus = status === "" || productStatus === status;
     return matchSearch && matchCategory && matchStatus;
   });
+  useEffect(() => {
+    const savedProducts = JSON.parse(localStorage.getItem("products") || "[]");
+    const combined = [...defaultProducts, ...savedProducts];
+    setProducts(combined);
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -90,7 +98,7 @@ export default function ProductsPage() {
         </Select.Root>
         <Button variant="secondary" onClick={() => { setSearch(""); setCategory(""); setStatus(""); }}>Clear Filters</Button>
         <div className="ml-auto flex gap-2">
-          <Button>Add Product</Button>
+          <Button><Link href="/addProducts">Add Product</Link></Button>
           <Button variant="outline">Export</Button>
         </div>
       </div>

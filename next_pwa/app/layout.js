@@ -18,11 +18,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full bg-gray-50">
-      <body className="h-full w-full overflow-hidden bg-gray-50 text-black">
+      <body className="min-h-screen bg-gray-50 text-black">
         <Theme>
-          <div className="flex h-full w-full">
-            <Sidebar /> {/* Persistent */}
-            <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
+          <div className="flex min-h-screen w-full">
+            <div className="h-screen w-[250px] shrink-0 border-r-black border-gray-200 bg-white fixed">
+              <Sidebar />
+            </div>
+            <main className="flex-1 ml-[250px] min-h-screen max-h-screen overflow-y-auto bg-gray-50 p-6">
               {children} {/* Dynamic content changes here */}
             </main>
            </div>

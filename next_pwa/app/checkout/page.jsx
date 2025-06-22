@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Button, Flex, Heading, Separator, Text, TextField } from "@radix-ui/themes";
 import { addToSyncQueue } from "../../lib/offline";
 
@@ -13,6 +13,17 @@ function generateUUID() {
 }
 
 export default function CheckoutPage() {
+  const [checkout, setCheckout] = useState({
+    products: [],
+    subtotal: 0,
+  });
+  useEffect(() => {
+  const savedCheckout = JSON.parse(localStorage.getItem("checkoutData") || "{}");
+  if (savedCheckout.products && savedCheckout.subtotal !== undefined) {
+    setCheckout(savedCheckout);
+  }
+  console.log(savedCheckout);
+}, []);
   const [confirmation, setConfirmation] = useState("");
   const handlePlaceOrder = async () => {
     // Dummy transaction data for testing
@@ -61,31 +72,41 @@ export default function CheckoutPage() {
           <Heading size="4" mb="3">Order Summary</Heading>
 
           <Flex direction="column" gap="3">
-            <Flex justify="between">
+            {checkout.products?.map((product) => {
+              return(
+                <>
+                <Flex justify="between">
+                  <Text>{product.name}</Text>
+                  <Text>₹{product.price}</Text>
+                </Flex>
+                </>
+              )
+            })}
+            {/* <Flex justify="between">
               <Text>Product 1</Text>
               <Text>₹499</Text>
             </Flex>
             <Flex justify="between">
               <Text>Product 2</Text>
               <Text>₹799</Text>
-            </Flex>
+            </Flex> */}
 
-            <Separator my="2" />
+            {/* <Separator my="2" />
 
             <Flex justify="between">
               <Text weight="bold">Subtotal</Text>
-              <Text weight="bold">₹1298</Text>
+              <Text weight="bold">₹{checkout.subtotal}</Text>
             </Flex>
             <Flex justify="between">
               <Text>Shipping</Text>
               <Text>₹50</Text>
-            </Flex>
+            </Flex> */}
 
             <Separator my="2" />
 
             <Flex justify="between">
               <Text weight="bold">Total</Text>
-              <Text weight="bold">₹1348</Text>
+              <Text weight="bold">₹{checkout.subtotal}</Text>
             </Flex>
 
             <Button className="mt-4" size="3" onClick={handlePlaceOrder}>Place Order</Button>
