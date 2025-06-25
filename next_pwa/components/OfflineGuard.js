@@ -1,33 +1,50 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { checkOnlineStatus, subscribeToOfflineChanges } from '../lib/offline';
 
-export default function OfflineGuard({ children }) {
+const OfflineGuard = () => {
     const [isOnline, setIsOnline] = useState(true);
+    const [showBanner, setShowBanner] = useState(false);
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            setIsOnline(navigator.onLine);
+        // Set initial online status
+        setIsOnline(checkOnlineStatus());
 
-            const updateStatus = () => setIsOnline(navigator.onLine);
-            window.addEventListener('online', updateStatus);
-            window.addEventListener('offline', updateStatus);
+        // Subscribe to online/offline changes
+        const unsubscribe = subscribeToOfflineChanges((online) => {
+            setIsOnline(online);
+            setShowBanner(true);
 
-            return () => {
-                window.removeEventListener('online', updateStatus);
-                window.removeEventListener('offline', updateStatus);
-            };
-        }
+            // Hide the banner after 3 seconds
+            setTimeout(() => {
+                setShowBanner(false);
+            }, 3000);
+        });
+
+        return () => {
+            unsubscribe();
+        };
     }, []);
 
+    if (!showBanner) return null;
+
     return (
-        <>
-            {!isOnline && (
-                <div className="fixed bottom-0 left-0 right-0 bg-yellow-500 p-2 text-center text-white">
-                    You are offline. Some features may be limited.
+        <div className={`fixed top-4 right-4 z-50 px-4 py-2 rounded-md shadow-md transition-all duration-300 ${isOnline ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }`}>
+            {isOnline ? (
+                <div className="flex items-center">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                    <span>Online - Syncing data</span>
+                </div>
+            ) : (
+                <div className="flex items-center">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                    <span>Offline - Changes will sync when online</span>
                 </div>
             )}
-            {children}
-        </>
+        </div>
     );
-}
+};
+
+export default OfflineGuard;

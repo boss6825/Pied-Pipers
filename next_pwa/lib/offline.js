@@ -1,9 +1,70 @@
+'use client';
+
 //handles offline storage of data, indexdb use kiya hai
 
 import { openDB } from 'idb';
+import { initializePouchDB, initializeSync, stopSync } from './db';
 
 const DB_NAME = 'walmart-edge-db'; //for offline data storage
 const STORE_NAME = 'offline-data'; //cached data store ke liye
+
+// Default online status set karo
+let isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
+let offlineListeners = [];
+
+// Sabhi listeners ko notify karne ka function
+const notifyListeners = (online) => {
+    if (typeof window === 'undefined') return;
+    offlineListeners.forEach((listener) => listener(online));
+};
+
+// Online/offline detection initialize karo
+export const initOfflineDetection = async () => {
+    if (typeof window !== 'undefined') {
+        // Sabse pehle PouchDB initialize karo
+        await initializePouchDB();
+
+        // Initial state set karo
+        isOnline = navigator.onLine;
+
+        // Online/offline events ke liye listeners lagao
+        window.addEventListener('online', async () => {
+            isOnline = true;
+            console.log('App is online');
+            await initializeSync(); // Online hone par sync start karo
+            notifyListeners(true);
+        });
+
+        window.addEventListener('offline', () => {
+            isOnline = false;
+            console.log('App is offline');
+            stopSync(); // Offline hone par sync band karo
+            notifyListeners(false);
+        });
+
+        // Agar online hai to sync start karo
+        if (isOnline) {
+            await initializeSync();
+        }
+    }
+};
+
+// App online hai ya nahi check karo
+export const checkOnlineStatus = () => {
+    return typeof window !== 'undefined' ? navigator.onLine : true;
+};
+
+// Online/offline changes ke liye subscribe karo
+export const subscribeToOfflineChanges = (listener) => {
+    if (typeof window === 'undefined') {
+        return () => { };
+    }
+
+    offlineListeners.push(listener);
+    return () => {
+        offlineListeners = offlineListeners.filter((l) => l !== listener);
+    };
+};
 
 export async function initDB() { //db initiate kia hai
     return openDB(DB_NAME, 1, {
@@ -38,11 +99,6 @@ export async function getAllOfflineData() {
     return db.getAll(STORE_NAME);
 }
 
-// Function to check connectivty
-export function isOffline() {
-    return typeof navigator !== 'undefined' && !navigator.onLine;
-}
-
 // Function to handle API requests with offline support
 export async function fetchWithOfflineSupport(url, options = {}) {
     const cacheKey = `${options.method || 'GET'}-${url}`;
@@ -60,7 +116,7 @@ export async function fetchWithOfflineSupport(url, options = {}) {
         return data;
     } catch (error) {
         // If offline, cache se uthao
-        if (isOffline() && (options.method === undefined || options.method === 'GET')) {
+        if (checkOnlineStatus() && (options.method === undefined || options.method === 'GET')) {
             const cachedData = await getFromOfflineStorage(cacheKey);
             if (cachedData) {
                 return cachedData;
@@ -93,7 +149,7 @@ export async function getPendingSyncs() {
 
 // Attempt to sync offline data with the server
 export async function syncOfflineData(apiEndpoint) {
-    if (!isOffline()) {
+    if (checkOnlineStatus()) {
         const pendingSyncs = await getPendingSyncs();
 
         for (const item of pendingSyncs) {
@@ -129,9 +185,9 @@ export function startSyncMonitoring(apiEndpoint, interval = 5 * 60 * 1000) { // 
     // Initial sync attempt
     syncOfflineData(apiEndpoint);
 
-    
+
     const intervalId = setInterval(() => {// Set up periodic sync jab connection hai
-        if (!isOffline()) {
+        if (checkOnlineStatus()) {
             syncOfflineData(apiEndpoint);
         }
     }, interval);
@@ -146,3 +202,9 @@ export function startSyncMonitoring(apiEndpoint, interval = 5 * 60 * 1000) { // 
         window.removeEventListener('online', () => { });
     };
 }
+
+export default {
+    initOfflineDetection,
+    checkOnlineStatus,
+    subscribeToOfflineChanges,
+};
