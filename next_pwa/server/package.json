@@ -1,0 +1,20 @@
+{
+  "name": "sync-gateway-server",
+  "version": "1.0.0",
+  "description": "A simple server that mimics Couchbase Sync Gateway for PouchDB",
+  "main": "sync-gateway.js",
+  "scripts": {
+    "start": "node sync-gateway.js",
+    "dev": "nodemon sync-gateway.js",
+    "dev": "next dev"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "pouchdb": "^9.0.0",
+    "pouchdb-find": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+} 
